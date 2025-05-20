@@ -55,7 +55,7 @@ def codigo_a_indices(codigo):
     except:
         return -1, -1 #Este es para codigo invalido
 
-#Función para ocupar espacios
+#1. Función para ocupar espacios
 def ocupar_espacio(parqueo, tipo_vehiculo, historial, contador_hora):
     intentos = 0
     max_intentos = 3
@@ -100,6 +100,41 @@ def ocupar_espacio(parqueo, tipo_vehiculo, historial, contador_hora):
     print("Número máximo de intentos alcanzado. No se pudo registrar el vehículo.")
     return contador_hora
 
+#2. Función para liberar espacio
+
+#comprobación si era un espacio nomral o para motos
+def es_espacio_para_moto(fila, columna, filas, columnas, cantidad_motos):
+    # calculamos que numero de espacio es y en que orden de fila o columna
+    numero_espacio = fila * columnas + columna
+    return numero_espacio < cantidad_motos
+
+#liberar espacio
+def liberar_espacio(parqueo, historial, contador_hora, filas, columnas, cantidad_motos):
+    mostrar_parqueo(parqueo)
+    codigo = input("Ingrese el código del espacio a liberar (Ejemplo: A-1): ").upper()
+    fila, columna = codigo_a_indices(codigo)
+
+    #Validamos
+    if fila < 0 or fila >= len(parqueo) or columna < 0 or columna >= len(parqueo[0]):
+        print("⚠️ Código inválido. Intente nuevamente.")
+        return contador_hora
+    
+    if parqueo[fila][columna] != "X":
+        print("⚠️ El espacio ya está libre. Intente nuevamente.")
+        return contador_hora
+
+    #Vamos a reconstruir el codigo original (puede tener * o no)
+    letra = chr(65 + fila)  # Convertir número de fila a letra (A, B, C, ...)
+    codigo_base = f"{letra}-{columna + 1}"  # Generar el código de espacio
+    if es_espacio_para_moto(fila, columna, filas, columnas, cantidad_motos):
+        codigo_base += "*"  # Agregar "*" para motos
+
+    parqueo[fila][columna] = codigo_base
+    historial.append((contador_hora, "Salida", "Desconocido", codigo))
+    print("Espacio liberado exitosamente.")
+    return contador_hora + 1
+
+
 #MENU PRINCIPAL
 historial = []
 contador_hora = 1
@@ -121,6 +156,9 @@ while True:
             print("\n❌ Tipo de vehículo inválido. Regresando al menú principal...")
             continue
         contador_hora = ocupar_espacio(parqueo, tipo, historial, contador_hora)
+
+    elif opcion == "2":
+        contador_hora = liberar_espacio(parqueo, historial, contador_hora, filas, espacios_por_fila, espacios_moto)
 
     elif opcion == "6":
         print("Saliendo del programa...")
