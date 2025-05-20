@@ -139,13 +139,25 @@ def liberar_espacio(parqueo, historial, contador_hora, filas, columnas, cantidad
 
     return contador_hora + 1
 
+#Funcióno para cambiar configuración de la matriz
+def cambiar_configuracion():
+    print("\nCambiando configuración de parqueo:")
+    filas_nuevas = int(input("\nIngresa la nueva cantidad de filas: "))
+    columnas_nuevas = int(input("Ingresa la nueva cantidad de espacios por fila: "))
+    motos_nuevas = int(input("Ingresa la nueva cantidad de espacios para motos: "))
+
+    nuevo_parqueo = crear_matriz_parqueo(filas_nuevas, columnas_nuevas, motos_nuevas)
+    print("\nConfiguración actualizada. El parqueo ha sido reiniciado.")
+    print("\n")
+
+    return nuevo_parqueo, filas_nuevas, columnas_nuevas, motos_nuevas, [], 1 #lo hacemos para reiniciar el contador de horas y el historial
 
 #MENU PRINCIPAL
 historial = []
 contador_hora = 1
 
 while True:
-    print(" MENÚ PRINCIPAL:")
+    print("MENÚ PRINCIPAL:")
     print("1. Ocupar espacio")
     print("2. Liberar espacio")
     print("3. Mostrar estado del parqueo")
@@ -167,6 +179,9 @@ while True:
 
     elif opcion == "3":
         mostrar_parqueo(parqueo)
+
+    elif opcion == "4":
+        parqueo, filas, espacios_por_fila, espacios_moto, historial, contador_hora = cambiar_configuracion()
 
     elif opcion == "6":
         print("Saliendo del programa...")
