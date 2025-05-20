@@ -36,14 +36,15 @@ print("\nEstado inicial del estacionamiento:")
 
 for fila in parqueo:
     print(" ".join(fila))
+print("\n")
 
 #Función para mostrar el parqueo
-
 def mostrar_parqueo(parqueo):
     print("\nEstado actual del estacionamiento:")
     for fila in parqueo:
         print(" ".join(fila))
     print("\n")
+
 
 #Función para convertir codigo a índices
 def codigo_a_indices(codigo):
@@ -95,6 +96,8 @@ def ocupar_espacio(parqueo, tipo_vehiculo, historial, contador_hora):
         parqueo[fila][columna] = "X"
         historial.append((contador_hora, "Entrada", tipo_vehiculo, codigo))
         print("Vehículo registrado exitosamente.")
+        print("\n")
+
         return contador_hora + 1
     
     print("Número máximo de intentos alcanzado. No se pudo registrar el vehículo.")
@@ -132,6 +135,8 @@ def liberar_espacio(parqueo, historial, contador_hora, filas, columnas, cantidad
     parqueo[fila][columna] = codigo_base
     historial.append((contador_hora, "Salida", "Desconocido", codigo))
     print("Espacio liberado exitosamente.")
+    print("\n")
+
     return contador_hora + 1
 
 
@@ -140,7 +145,7 @@ historial = []
 contador_hora = 1
 
 while True:
-    print("\n MENÚ PRINCIPAL:")
+    print(" MENÚ PRINCIPAL:")
     print("1. Ocupar espacio")
     print("2. Liberar espacio")
     print("3. Mostrar estado del parqueo")
@@ -160,10 +165,15 @@ while True:
     elif opcion == "2":
         contador_hora = liberar_espacio(parqueo, historial, contador_hora, filas, espacios_por_fila, espacios_moto)
 
+    elif opcion == "3":
+        mostrar_parqueo(parqueo)
+
     elif opcion == "6":
         print("Saliendo del programa...")
         break
 
     else:
         print("Opción no añadida.")
+        print("\n")
         continue
+
